@@ -6,42 +6,112 @@
   <title>食譜首頁</title>
   <style>
     body {
-      margin:0; 
-      height:100vh; 
-      display:flex; 
-      align-items:center; 
-      justify-content:center; 
+      margin:0;
+      height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       flex-direction:column;
-      font-family: system-ui, "Noto Sans TC", sans-serif;
-      background:#f9fafb;
+      font-family: 'Segoe UI', 'Noto Sans TC', '微軟正黑體', Arial, sans-serif;
+      background: linear-gradient(120deg, #f0e7ff 0%, #c7d2fe 60%, #f0fdfa 100%);
+      position: relative;
+      overflow: hidden;
     }
     h1 {
-      margin-bottom: 30px;
-      color:#1f2937;
+      margin-bottom: 36px;
+      color: #312e81;
+      letter-spacing: 4px;
+      font-size: 2.6rem;
+      text-shadow: 0 4px 24px #a5b4fc, 0 1px 0 #fff;
+      background: linear-gradient(90deg, #818cf8 30%, #f472b6 70%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
     .btn {
       display:inline-block;
-      margin:10px;
-      padding:14px 0;
-      width:180px;              /* 固定寬度，確保大小一致 */
-      font-size:18px;
+      margin:14px;
+      padding:16px 0;
+      width:200px;
+      font-size:20px;
       text-align:center;
       color:#fff;
-      background:#3b82f6;
+      background: linear-gradient(90deg, #38bdf8 60%, #818cf8 100%);
       border:none;
-      border-radius:12px;
+      border-radius:16px;
       cursor:pointer;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.18s, box-shadow 0.18s;
       text-decoration:none;
+      box-shadow: 0 4px 24px #818cf855, 0 1.5px 0 #fff;
+      font-weight: 600;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
     }
     .btn:hover {
-      background:#2563eb;
+      background: linear-gradient(90deg, #f472b6 40%, #38bdf8 100%);
+      transform: translateY(-5px) scale(1.05) rotate(-1deg);
+      box-shadow: 0 8px 32px #818cf888, 0 2px 0 #fff;
+    }
+    .btn::after {
+      content: '';
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 0; height: 0;
+      background: rgba(255,255,255,0.18);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.4s, height 0.4s;
+      z-index: -1;
+    }
+    .btn:active::after {
+      width: 180%;
+      height: 400%;
+      transition: 0s;
+    }
+    /* 彩色圓點裝飾 */
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.13;
+      z-index: 0;
+      animation: float 14s infinite linear;
+      filter: blur(1px);
+    }
+    .bubble1 { width: 140px; height: 140px; background: #fbbf24; left: 4vw; top: 8vh; animation-delay: 0s;}
+    .bubble2 { width: 90px; height: 90px; background: #38bdf8; right: 7vw; top: 22vh; animation-delay: 2s;}
+    .bubble3 { width: 70px; height: 70px; background: #a7f3d0; left: 12vw; bottom: 10vh; animation-delay: 4s;}
+    .bubble4 { width: 110px; height: 110px; background: #f472b6; right: 10vw; bottom: 7vh; animation-delay: 6s;}
+    .bubble5 { width: 60px; height: 60px; background: #fca5a5; left: 45vw; top: 5vh; animation-delay: 7s;}
+    .bubble6 { width: 50px; height: 50px; background: #fcd34d; right: 40vw; bottom: 4vh; animation-delay: 9s;}
+    @keyframes float {
+      0% { transform: translateY(0) scale(1);}
+      50% { transform: translateY(-40px) scale(1.12);}
+      100% { transform: translateY(0) scale(1);}
+    }
+    /* 漸層底部波浪 */
+    .wave {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      height: 120px;
+      z-index: 2;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
+  <div class="bubble bubble1"></div>
+  <div class="bubble bubble2"></div>
+  <div class="bubble bubble3"></div>
+  <div class="bubble bubble4"></div>
+  <div class="bubble bubble5"></div>
+  <div class="bubble bubble6"></div>
   <h1>茶飲專案</h1>
   <a class="btn" href="ice.html">冰沙</a>
   <a class="btn" href="tea.html">調味茶</a>
+  <svg class="wave" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#c7d2fe" fill-opacity="0.7" d="M0,80 C360,140 1080,0 1440,80 L1440,120 L0,120 Z"/>
+    <path fill="#818cf8" fill-opacity="0.13" d="M0,100 C400,60 1040,180 1440,100 L1440,120 L0,120 Z"/>
+  </svg>
 </body>
 </html>
