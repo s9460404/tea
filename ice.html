@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>冰沙食譜｜單頁版</title>
+  <style>
+    :root{
+      --bg:#fafafa;--card:#ffffff;--ink:#1f2937;--muted:#6b7280;--accent:#3b82f6;--ring:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans TC",sans-serif;line-height:1.6;color:var(--ink);background:var(--bg)}
+    header{position:sticky;top:0;z-index:10;background:rgba(250,250,250,.9);backdrop-filter:saturate(180%) blur(6px);border-bottom:1px solid var(--ring)}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px 20px}
+    h1{margin:0;font-size:clamp(22px,3.4vw,32px)}
+    .subtitle{color:var(--muted);font-size:14px}
+    .toolbar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+    input[type="search"]{flex:1;min-width:220px;padding:10px 12px;border:1px solid var(--ring);border-radius:10px}
+    button{padding:10px 14px;border:1px solid var(--ring);background:var(--card);border-radius:10px;cursor:pointer}
+
+    .layout{display:grid;grid-template-columns:280px 1fr;gap:18px;max-width:1100px;margin:14px auto;padding:0 20px}
+    @media (max-width:880px){.layout{grid-template-columns:1fr}}
+
+    nav{position:sticky;top:84px;align-self:start;background:var(--card);border:1px solid var(--ring);border-radius:14px;padding:12px}
+    .toc{list-style:none;margin:0;padding:0}
+    .toc li{margin:.5rem 0}
+    .toc a{text-decoration:none;color:var(--ink);padding:6px 8px;border-radius:6px;display:block}
+    .toc a:hover{background:#f3f4f6}
+
+    main{display:grid;gap:14px}
+    article{background:var(--card);border:1px solid var(--ring);border-radius:16px;padding:16px}
+    article h2{margin:0 0 8px}
+    .meta{color:var(--muted);font-size:14px;margin-bottom:8px}
+    .grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px}
+    @media(max-width:720px){.grid{grid-template-columns:1fr}}
+    .section-title{font-weight:700;margin:.5rem 0}
+    .ingredients{border:1px dashed var(--ring);border-radius:12px;padding:10px 12px;background:#fbfbfb}
+    .steps{white-space:pre-line}
+    .media .ph{display:grid;place-items:center;border:1px dashed var(--ring);border-radius:12px;padding:16px;color:var(--muted);min-height:120px}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>冰沙食譜</h1>
+      <div class="subtitle">根據文件內容整理｜含目錄、搜尋</div>
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="搜尋冰沙名稱或食材…" />
+        <button id="printBtn">列印</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+    <nav>
+      <ul id="toc" class="toc"></ul>
+    </nav>
+    <main id="recipes"></main>
+  </div>
+
+  <script>
+  const DATA = [
+    {id:"matcha-redbean",name:"抹茶紅豆冰沙",ingredients:["冰塊700cc","抹茶粉40g","果糖30cc","冷開水80cc","冰沙粉10g","紅豆粒1勺"],steps:"冰塊700cc+抹茶粉40g+果糖30cc+冷開水80cc+冰沙粉10g+紅豆粒1勺 攪打至冰沙。",image:"",video:""},
+    {id:"cocoa",name:"可可冰沙",ingredients:["冰塊700cc","純巧克力粉20g","特級奶精10g","典藏奶精10g","果糖30cc","冷開水80cc"],steps:"冰塊700cc+純巧克力粉20g+特級奶精10g+典藏奶精10g+果糖30cc+冷開水80cc 攪打至冰沙。",image:"",video:""},
+    {id:"passion",name:"百香果冰沙",ingredients:["冰塊700cc","百香果汁80cc","冷開水60cc","冰沙粉10g"],steps:"冰塊700cc+百香果汁80cc+冷開水60cc+冰沙粉10g 攪打至冰沙。",image:"",video:""},
+    {id:"wintermelon",name:"冬瓜冰沙",ingredients:["冰塊700cc","冬瓜80cc","冷開水60cc","冰沙粉10g"],steps:"冰塊700cc+冬瓜80cc+冷開水60cc+冰沙粉10g 攪打至冰沙。",image:"",video:""},
+    {id:"mango",name:"芒果冰沙",ingredients:["冰塊700cc","芒果汁80cc","冷開水60cc","冰沙粉10g"],steps:"冰塊700cc+芒果汁80cc+冷開水60cc+冰沙粉10g 攪打至冰沙。",image:"",video:""},
+    {id:"strawberry",name:"草莓冰沙",ingredients:["冰塊700cc","草莓汁80cc","冷開水60cc","冰沙粉10g"],steps:"冰塊700cc+草莓汁80cc+冷開水60cc+冰沙粉10g 攪打至冰沙。",image:"",video:""},
+    {id:"hawaii-green",name:"夏威夷綠茶冰沙",ingredients:["冰塊700cc","夏威夷果汁80cc","綠茶60cc","冰沙粉10g"],steps:"冰塊700cc+夏威夷果汁80cc+綠茶60cc+冰沙粉10g 攪打至冰沙。",image:"",video:""},
+    {id:"kiwi-green",name:"奇異果綠茶冰沙",ingredients:["冰塊700cc","奇異果汁70cc","綠茶60cc","冰沙粉10g","果糖30cc"],steps:"冰塊700cc+奇異果汁70cc+綠茶60cc+冰沙粉10g+果糖30cc 攪打至冰沙。",image:"",video:""},
+    {id:"apple-earl",name:"蘋果伯爵冰沙",ingredients:["冰塊700cc","黃蘋果汁80cc","伯爵茶60cc","冰沙粉10g"],steps:"冰塊700cc+黃蘋果汁80cc+伯爵茶60cc+冰沙粉10g 攪打至冰沙。",image:"",video:""}
+  ];
+
+  const toc=document.getElementById('toc');
+  const container=document.getElementById('recipes');
+
+  function createRecipeCard(r){
+    const art=document.createElement('article');
+    art.id=r.id;
+    art.dataset.name=r.name;
+    art.dataset.ingredients=r.ingredients.join(' ');
+
+    art.innerHTML=`<h2>${r.name}</h2>
+      <div class="meta">類別：冰沙｜份量：1杯</div>
+      <div class="grid">
+        <div>
+          <div class="section-title">步驟</div>
+          <div class="steps">${r.steps}</div>
+          <div class="section-title">材料</div>
+          <ul class="ingredients">${r.ingredients.map(x=>`<li>${x}</li>`).join('')}</ul>
+        </div>
+        <div class="media">
+          ${r.image?`<img src="${r.image}" alt="${r.name}" style="width:100%;border-radius:12px">`:`<div class='ph'>成品照（image連結）</div>`}
+          ${r.video?`<video src="${r.video}" controls style="width:100%;border-radius:12px"></video>`:`<div class='ph'>教學影片（video連結）</div>`}
+        </div>
+      </div>`;
+    return art;
+  }
+
+  function render(){
+    toc.innerHTML='';
+    container.innerHTML='';
+    DATA.forEach(r=>{
+      const li=document.createElement('li');
+      li.innerHTML=`<a href="#${r.id}">${r.name}</a>`;
+      toc.appendChild(li);
+      container.appendChild(createRecipeCard(r));
+    });
+  }
+  render();
+
+  document.getElementById('q').addEventListener('input',e=>{
+    const kw=e.target.value.trim().toLowerCase();
+    [...container.querySelectorAll('article')].forEach(c=>{
+      const hay=(c.dataset.name+" "+c.dataset.ingredients).toLowerCase();
+      c.classList.toggle('hidden',kw && !hay.includes(kw));
+    });
+  });
+
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+  </script>
+</body>
+</html>
